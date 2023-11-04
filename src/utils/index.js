@@ -41,3 +41,8 @@ export const verifyRefreshToken = (token) => {
     return null;
   }
 };
+
+export const formatNumber = (number) =>
+  number.toLocaleString("pt-br", {
+    minimumFractionDigits: 2,
+  });

@@ -9,7 +9,7 @@ import {
 } from "../utils/index.js";
 
 export const userController = {
-  sign: async (req, resp) => {
+  signIn: async (req, resp) => {
     try {
       const { email, password } = req.body;
       const user = await UserSchema.findOne({ email });
@@ -26,7 +26,7 @@ export const userController = {
       const refreshToken = generateRefreshToken(user._id, user.email);
 
       resp.status(200).json({
-        message: "Autenticação realizada com sucesso",
+        message: "Autenticação realizada com sucesso.",
         accessToken,
         refreshToken,
       });
@@ -36,33 +36,7 @@ export const userController = {
       });
     }
   },
-  refreshToken: async (req, resp) => {
-    try {
-      const authHeader = req.headers["authorization"];
-      const refreshToken = authHeader && authHeader.split(" ")[1];
-
-      const decodedRefreshToken = verifyRefreshToken(refreshToken);
-
-      if (!decodedRefreshToken) {
-        return resp
-          .status(401)
-          .json({ message: "Refresh token expirado ou inválido." });
-      }
-
-      const newAccessToken = generateToken(
-        decodedRefreshToken._id,
-        decodedRefreshToken.email
-      );
-
-      resp.status(200).json({
-        message: "Token de acesso atualizado com sucesso",
-        accessToken: newAccessToken,
-      });
-    } catch (error) {
-      resp.status(500).send({ message: defaultInternalErrorMessage });
-    }
-  },
-  register: async (req, resp) => {
+  signUp: async (req, resp) => {
     try {
       const { email, password } = req.body;
 
@@ -87,6 +61,31 @@ export const userController = {
       resp.status(500).send({
         message: defaultInternalErrorMessage,
       });
+    }
+  },
+  refreshToken: async (req, resp) => {
+    try {
+      const refreshToken = req.body.refreshToken;
+
+      const decodedRefreshToken = verifyRefreshToken(refreshToken);
+
+      if (!decodedRefreshToken) {
+        return resp
+          .status(401)
+          .json({ message: "Refresh token expirado ou inválido." });
+      }
+
+      const newAccessToken = generateToken(
+        decodedRefreshToken._id,
+        decodedRefreshToken.email
+      );
+
+      resp.status(200).json({
+        message: "Token de acesso atualizado com sucesso",
+        accessToken: newAccessToken,
+      });
+    } catch (error) {
+      resp.status(500).send({ message: defaultInternalErrorMessage });
     }
   },
   getUser: async (req, resp) => {
