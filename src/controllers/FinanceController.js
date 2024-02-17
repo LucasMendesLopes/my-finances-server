@@ -61,4 +61,21 @@ export const financeController = {
       });
     }
   },
+  deleteFinance: async (req, resp) => {
+    try {
+      const { financeId } = req.params;
+
+      const _id = financeId;
+
+      await FinanceSchema.deleteOne({ _id });
+
+      resp.status(200).send({
+        message: "Finança deletada com sucesso.",
+      });
+    } catch (error) {
+      resp.status(500).send({
+        message: defaultInternalErrorMessage,
+      });
+    }
+  },
 };

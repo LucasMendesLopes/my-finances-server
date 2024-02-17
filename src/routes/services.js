@@ -10,11 +10,16 @@ servicesRouter.post("/auth/signUp", userController.signUp);
 servicesRouter.post("/refresh-token", userController.refreshToken);
 servicesRouter.get("/users/:id", checkToken, userController.getUser);
 
-servicesRouter.post("/finances", checkToken, financeController.register);
 servicesRouter.get(
   "/finances/:userId",
   checkToken,
   financeController.getFinances
+);
+servicesRouter.post("/finances", checkToken, financeController.register);
+servicesRouter.delete(
+  "/finances/:financeId",
+  checkToken,
+  financeController.deleteFinance
 );
 
 export { servicesRouter };
