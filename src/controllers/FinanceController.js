@@ -27,8 +27,34 @@ export const financeController = {
   getFinances: async (req, resp) => {
     try {
       const { userId } = req.params;
+      const { yearAndMonth } = req.query;
 
-      const finances = await FinanceSchema.find({ userId });
+      const [year, month] = yearAndMonth.split("-");
+      const targetDate = new Date(parseInt(year), parseInt(month) - 1, 1);
+
+      const startDate = new Date(
+        targetDate.getFullYear(),
+        targetDate.getMonth(),
+        1
+      );
+
+      const endDate = new Date(
+        targetDate.getFullYear(),
+        targetDate.getMonth() + 1,
+        0,
+        23,
+        59,
+        59,
+        999
+      );
+
+      const finances = await FinanceSchema.find({
+        userId,
+        date: {
+          $gte: startDate.getTime() / 1000,
+          $lte: endDate.getTime() / 1000,
+        },
+      });
 
       let inflows = 0;
       let outflows = 0;
