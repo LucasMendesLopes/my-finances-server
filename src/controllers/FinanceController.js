@@ -75,8 +75,14 @@ export const financeController = {
 
       let total = inflows - outflows;
 
+      const sortedFinances = formattedFinances.sort((a, b) => {
+        const dateA = new Date(a.date.split("/").reverse().join("/"));
+        const dateB = new Date(b.date.split("/").reverse().join("/"));
+        return dateB - dateA;
+      });
+
       resp.status(200).send({
-        finances: formattedFinances,
+        finances: sortedFinances,
         inflows: formatNumber(inflows),
         outflows: formatNumber(outflows),
         total: formatNumber(total),
