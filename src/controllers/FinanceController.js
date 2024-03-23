@@ -27,7 +27,8 @@ export const financeController = {
   getFinances: async (req, resp) => {
     try {
       const { userId } = req.params;
-      const { yearAndMonth } = req.query;
+      const { yearAndMonth, page } = req.query;
+      const itemsPerPage = 10;
 
       const [year, month] = yearAndMonth.split("-");
       const targetDate = new Date(parseInt(year), parseInt(month) - 1, 1);
@@ -81,8 +82,19 @@ export const financeController = {
         return dateB - dateA;
       });
 
+      const totalItems = sortedFinances.length;
+      const totalPages = Math.ceil(totalItems / itemsPerPage);
+      const currentPage = parseInt(page) || 1;
+
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const paginatedFinances = sortedFinances.slice(startIndex, endIndex);
+
       resp.status(200).send({
-        finances: sortedFinances,
+        finances: paginatedFinances,
+        currentPage,
+        totalPages,
+        itemsPerPage,
         inflows: formatNumber(inflows),
         outflows: formatNumber(outflows),
         total: formatNumber(total),
