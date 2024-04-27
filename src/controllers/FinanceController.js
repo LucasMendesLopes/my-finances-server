@@ -17,7 +17,7 @@ export const financeController = {
 
       return resp
         .status(201)
-        .send({ message: "Finança cadastrada com sucesso." });
+        .send({ message: "Finança cadastrada com sucesso" });
     } catch (error) {
       resp.status(500).send({
         message: defaultInternalErrorMessage,
@@ -70,6 +70,7 @@ export const financeController = {
 
         return {
           ...finance.toObject(),
+          value: formatNumber(finance.value),
           date: formattedDate,
         };
       });
@@ -105,6 +106,34 @@ export const financeController = {
       });
     }
   },
+  editFinance: async (req, resp) => {
+    try {
+      const { date, description, type, value } = req.body;
+      const { financeId } = req.params;
+
+      const _id = financeId;
+
+      await FinanceSchema.updateOne(
+        { _id },
+        {
+          $set: {
+            date: new Date(date).getTime() / 1000,
+            description,
+            type,
+            value,
+          },
+        }
+      );
+
+      resp.status(200).send({
+        message: "Finança editada com sucesso",
+      });
+    } catch (error) {
+      resp.status(500).send({
+        message: defaultInternalErrorMessage,
+      });
+    }
+  },
   deleteFinance: async (req, resp) => {
     try {
       const { financeId } = req.params;
@@ -114,7 +143,7 @@ export const financeController = {
       await FinanceSchema.deleteOne({ _id });
 
       resp.status(200).send({
-        message: "Finança deletada com sucesso.",
+        message: "Finança deletada com sucesso",
       });
     } catch (error) {
       resp.status(500).send({

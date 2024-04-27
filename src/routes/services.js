@@ -21,5 +21,10 @@ servicesRouter.delete(
   checkToken,
   financeController.deleteFinance
 );
+servicesRouter.put(
+  "/finances/:financeId",
+  checkToken,
+  financeController.editFinance
+);
 
 export { servicesRouter };
