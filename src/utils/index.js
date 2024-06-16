@@ -18,17 +18,21 @@ export function checkToken(req, resp, next) {
 
 export const generateToken = (id, email) => {
   const secret = process.env.SECRET;
-  const token = jwt.sign({ id, email }, secret, {
-    expiresIn: "1h",
-  });
+  const token = jwt.sign({ id, email }, secret,
+    //   {
+    //   expiresIn: "10s",
+    // }
+  );
   return token;
 };
 
 export const generateRefreshToken = (id, email) => {
   const refreshSecret = process.env.REFRESH_SECRET;
-  const refreshToken = jwt.sign({ id, email }, refreshSecret, {
-    expiresIn: "3h",
-  });
+  const refreshToken = jwt.sign({ id, email }, refreshSecret,
+    // {
+    //   expiresIn: "3h",
+    // }
+  );
   return refreshToken;
 };
 
