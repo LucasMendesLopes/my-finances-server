@@ -20,7 +20,7 @@ Pelo terminal:
 - Crie sua conta gratuitamente no Mongo DB: https://www.mongodb.com/pt-br/cloud/atlas/register
 - Crie um cluster
 - Clique em drivers e copie a string de conexão
-- Substitua a string de conexão no arquivo conn.js presente na pasta db, dentro do projeto, pela string copiada do Mongo DB, lembrando de manter o "${DB_USER}:${DB_PASS}"
+- Dentro do projeto, substitua a string de conexão no arquivo `conn.js` presente na pasta `db`, pela string copiada do Mongo DB, lembrando de manter o "${DB_USER}:${DB_PASS}"
 
 ## Variáveis de Ambiente - ENVS
 
