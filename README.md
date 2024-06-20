@@ -12,7 +12,7 @@ Antes de começar, você vai precisar ter instalado em sua máquina as seguintes
 Pelo terminal:
 
 - Faça o clone do projeto em algum local da sua máquina. Exemplo: `user/projetos`
-- Vá até a pasta que você acabou de clonar. Exemplo: `cd user/projetos/my-finances`
+- Vá até a pasta que você acabou de clonar. Exemplo: `cd user/projetos/my-finances-server`
 - Utilizando **npm** ou **yarn**, instale as dependências do projeto. Exemplo: execute o comando `yarn` ou `npm i`
 
 ## Configurando o banco de dados
