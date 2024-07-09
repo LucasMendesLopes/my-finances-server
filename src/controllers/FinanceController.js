@@ -27,7 +27,7 @@ export const financeController = {
   getFinances: async (req, resp) => {
     try {
       const { userId } = req.params;
-      const { yearAndMonth, page } = req.query;
+      const { yearAndMonth, description, page } = req.query;
       const itemsPerPage = 10;
 
       const [year, month] = yearAndMonth.split("-");
@@ -49,7 +49,7 @@ export const financeController = {
         999
       );
 
-      const finances = await FinanceSchema.find({
+      const allFinances = await FinanceSchema.find({
         userId,
         date: {
           $gte: startDate.getTime() / 1000,
@@ -60,13 +60,22 @@ export const financeController = {
       let inflows = 0;
       let outflows = 0;
 
+      allFinances.forEach((finance) => {
+        if (finance.type === "entrada") inflows += finance.value;
+        else if (finance.type === "saida") outflows += finance.value;
+      });
+
+      let finances = allFinances;
+
+      if (description) {
+        const regex = new RegExp(description, 'i');
+        finances = allFinances.filter(finance => regex.test(finance.description));
+      }
+
       const formattedFinances = finances.map((finance) => {
         const formattedDate = new Date(finance.date * 1000).toLocaleDateString(
           "pt-BR"
         );
-
-        if (finance.type === "entrada") inflows += finance.value;
-        else if (finance.type === "saida") outflows += finance.value;
 
         return {
           ...finance.toObject(),
