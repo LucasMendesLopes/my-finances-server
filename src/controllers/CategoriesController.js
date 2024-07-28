@@ -52,6 +52,33 @@ export const categoriesController = {
             });
         }
     },
+    editCategory: async (req, resp) => {
+        try {
+            const { name, color, type } = req.body;
+            const { categoryId } = req.params;
+
+            const _id = categoryId;
+
+            await CategorySchema.updateOne(
+                { _id },
+                {
+                    $set: {
+                        name,
+                        color,
+                        type,
+                    },
+                }
+            );
+
+            resp.status(200).send({
+                message: "Categoria editada com sucesso",
+            });
+        } catch (error) {
+            resp.status(500).send({
+                message: defaultInternalErrorMessage,
+            });
+        }
+    },
     deleteCategory: async (req, resp) => {
         try {
             const { categoryId } = req.params;

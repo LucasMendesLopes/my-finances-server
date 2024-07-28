@@ -32,6 +32,11 @@ servicesRouter.get(
   categoriesController.getCategories
 );
 servicesRouter.post("/categories", checkToken, categoriesController.register);
+servicesRouter.put(
+  "/categories/:categoryId",
+  checkToken,
+  categoriesController.editCategory
+);
 servicesRouter.delete(
   "/categories/:categoryId",
   checkToken,
