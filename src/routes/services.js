@@ -1,7 +1,6 @@
 import { Router } from "express";
-import { userController } from "../controllers/UserController.js";
 import { checkToken } from "../utils/index.js";
-import { financeController } from "../controllers/FinanceController.js";
+import { categoriesController, financeController, userController } from "../controllers/index.js";
 
 const servicesRouter = Router();
 
@@ -25,6 +24,18 @@ servicesRouter.put(
   "/finances/:financeId",
   checkToken,
   financeController.editFinance
+);
+
+servicesRouter.get(
+  "/categories/:userId",
+  checkToken,
+  categoriesController.getCategories
+);
+servicesRouter.post("/categories", checkToken, categoriesController.register);
+servicesRouter.delete(
+  "/categories/:categoryId",
+  checkToken,
+  categoriesController.deleteCategory
 );
 
 export { servicesRouter };

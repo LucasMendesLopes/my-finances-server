@@ -1,4 +1,5 @@
-import { UserSchema } from "./User.js";
+import { CategorySchema } from "./Category.js";
 import { FinanceSchema } from "./Finance.js";
+import { UserSchema } from "./User.js";
 
-export { UserSchema, FinanceSchema };
+export { CategorySchema, FinanceSchema, UserSchema };
