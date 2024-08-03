@@ -1,4 +1,4 @@
-import { CategorySchema } from "../models/index.js";
+import { CategorySchema, Finance } from "../models/index.js";
 import { defaultInternalErrorMessage } from "../constant/index.js";
 
 export const categoriesController = {
@@ -63,7 +63,7 @@ export const categoriesController = {
     },
     editCategory: async (req, resp) => {
         try {
-            const { name, color, type } = req.body;
+            const { name, color, type, userId } = req.body;
             const { categoryId } = req.params;
 
             const _id = categoryId;
@@ -75,6 +75,17 @@ export const categoriesController = {
                         name,
                         color,
                         type,
+                    },
+                }
+            );
+
+            await Finance.updateMany(
+                { $and: [{ "category._id": categoryId, userId: userId }] },
+                {
+                    $set: {
+                        "category.name": name,
+                        "category.color": color,
+                        "category.type": type,
                     },
                 }
             );
