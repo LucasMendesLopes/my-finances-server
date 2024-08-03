@@ -1,17 +1,17 @@
-import { FinanceSchema } from "../models/index.js";
+import { Finance } from "../models/index.js";
 import { defaultInternalErrorMessage } from "../constant/index.js";
 import { formatNumber } from "../utils/index.js";
 
 export const financeController = {
   register: async (req, resp) => {
     try {
-      const { date, description, type, value, userId } = req.body;
+      const { date, description, value, category, userId } = req.body;
 
-      await FinanceSchema.create({
+      await Finance.create({
         date: new Date(date).getTime() / 1000,
         description,
-        type,
         value,
+        category,
         userId,
       });
 
@@ -49,7 +49,7 @@ export const financeController = {
         999
       );
 
-      const allFinances = await FinanceSchema.find({
+      const allFinances = await Finance.find({
         userId,
         date: {
           $gte: startDate.getTime() / 1000,
@@ -61,8 +61,8 @@ export const financeController = {
       let outflows = 0;
 
       allFinances.forEach((finance) => {
-        if (finance.type === "entrada") inflows += finance.value;
-        else if (finance.type === "saida") outflows += finance.value;
+        if (finance.category.type === "entrada") inflows += finance.value;
+        else if (finance.category.type === "saida") outflows += finance.value;
       });
 
       let finances = allFinances;
@@ -117,19 +117,19 @@ export const financeController = {
   },
   editFinance: async (req, resp) => {
     try {
-      const { date, description, type, value } = req.body;
+      const { date, description, value, category } = req.body;
       const { financeId } = req.params;
 
       const _id = financeId;
 
-      await FinanceSchema.updateOne(
+      await Finance.updateOne(
         { _id },
         {
           $set: {
             date: new Date(date).getTime() / 1000,
             description,
-            type,
             value,
+            category
           },
         }
       );
@@ -149,7 +149,7 @@ export const financeController = {
 
       const _id = financeId;
 
-      await FinanceSchema.deleteOne({ _id });
+      await Finance.deleteOne({ _id });
 
       resp.status(200).send({
         message: "Finança deletada com sucesso",

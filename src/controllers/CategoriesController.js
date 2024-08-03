@@ -32,6 +32,15 @@ export const categoriesController = {
                 userId
             });
 
+            if (!page) {
+                return resp.status(200).send({
+                    categories,
+                    currentPage: 1,
+                    totalPages: 1,
+                    itemsPerPage: categories.length,
+                });
+            }
+
             const totalItems = categories.length;
             const totalPages = Math.ceil(totalItems / itemsPerPage);
             const currentPage = parseInt(page) || 1;
