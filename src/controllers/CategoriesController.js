@@ -102,14 +102,23 @@ export const categoriesController = {
     deleteCategory: async (req, resp) => {
         try {
             const { categoryId } = req.params;
-
             const _id = categoryId;
 
-            await CategorySchema.deleteOne({ _id });
+            const financeWithThisCategory = await Finance.findOne({ "category._id": categoryId });
 
-            resp.status(200).send({
-                message: "Categoria deletada com sucesso",
-            });
+            if (financeWithThisCategory) {
+                return (
+                    resp.status(400).send({
+                        message: "Você não pode deletar uma categoria que está incluída em uma ou mais transações",
+                    })
+                )
+            } else {
+                await CategorySchema.deleteOne({ _id });
+
+                resp.status(200).send({
+                    message: "Categoria deletada com sucesso",
+                });
+            }
         } catch (error) {
             resp.status(500).send({
                 message: defaultInternalErrorMessage,
